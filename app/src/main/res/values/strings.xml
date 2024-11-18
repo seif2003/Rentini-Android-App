@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Rentini</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="chat_title">Chat</string>
+    <string name="title_properties">Properties</string>
+    <string name="title_saved">Saved</string>
+    <string name="profile">Profile</string>
+    <string name="welcomeText">Find the tenant, list your property in just a simple steps, in your hand.</string>
+
+</resources>
