@@ -69,11 +69,7 @@ public class PropertyDetailActivity extends AppCompatActivity {
 
         // Contact Button 0 (Message Intent - Explicit Intent)
         contact0.setOnClickListener(v -> {
-            // Create an Intent to open messaging app
-            Intent messageIntent = new Intent(Intent.ACTION_SENDTO);
-            messageIntent.setData(Uri.parse("sms:")); // Send SMS Intent
-            messageIntent.putExtra("sms_body", "Hello, I am interested in the property details.");
-            startActivity(messageIntent);
+            
         });
 
         // Contact Button 1 (Call Intent - Implicit Intent)
