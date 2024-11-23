@@ -24,6 +24,9 @@
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.home.PropertyDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".PersonalDetails"
             android:exported="false" />
         <activity
