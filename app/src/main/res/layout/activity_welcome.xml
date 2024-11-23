@@ -37,7 +37,7 @@
         android:textColor="@color/darkBlue"
         android:textSize="24dp"
         android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
@@ -45,12 +45,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-20dp"
-        android:fontFamily="@font/hind_bold"
         android:text="@string/app_name"
+        android:fontFamily="@font/hind_bold"
         android:textColor="@color/darkBlue"
         android:textSize="42dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
@@ -58,29 +58,32 @@
         android:layout_width="325dp"
         android:layout_height="33dp"
         android:text="@string/welcomeText"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="TextViewYou are one step away."
-        app:layout_constraintStart_toStartOf="@+id/textView3"
+        android:layout_marginTop="8dp"
+        android:text="You are one step away."
+        app:layout_constraintStart_toStartOf="@+id/logout_button"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
-        android:layout_width="325dp"
+        android:id="@+id/logout_button"
+        android:layout_width="350dp"
         android:layout_height="51dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="52dp"
         android:background="@drawable/gradient_button_background"
         android:text="Get Started"
         android:textColor="@android:color/white"
+        android:textSize="20dp"
         app:backgroundTint="@null"
         app:cornerRadius="118dp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
