@@ -42,15 +42,125 @@ public class Property {
         this.hasFurnished = hasFurnished;
     }
 
-    // Add new getters/setters
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    // Getters and Setters for all attributes
+    public String getId() {
+        return id;
+    }
 
-    public int getRooms() { return rooms; }
-    public void setRooms(int rooms) { this.rooms = rooms; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public double getSurface() { return surface; }
-    public void setSurface(double surface) { this.surface = surface; }
+    public String getTitle() {
+        return title;
+    }
 
-    // Existing getters/setters remain the same
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(int rooms) {
+        this.rooms = rooms;
+    }
+
+    public double getSurface() {
+        return surface;
+    }
+
+    public void setSurface(double surface) {
+        this.surface = surface;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public boolean isHasWifi() {
+        return hasWifi;
+    }
+
+    public void setHasWifi(boolean hasWifi) {
+        this.hasWifi = hasWifi;
+    }
+
+    public boolean isHasParking() {
+        return hasParking;
+    }
+
+    public void setHasParking(boolean hasParking) {
+        this.hasParking = hasParking;
+    }
+
+    public boolean isHasKitchen() {
+        return hasKitchen;
+    }
+
+    public void setHasKitchen(boolean hasKitchen) {
+        this.hasKitchen = hasKitchen;
+    }
+
+    public boolean isHasAirConditioning() {
+        return hasAirConditioning;
+    }
+
+    public void setHasAirConditioning(boolean hasAirConditioning) {
+        this.hasAirConditioning = hasAirConditioning;
+    }
+
+    public boolean isHasFurnished() {
+        return hasFurnished;
+    }
+
+    public void setHasFurnished(boolean hasFurnished) {
+        this.hasFurnished = hasFurnished;
+    }
 }
+
