@@ -1,6 +1,7 @@
 package com.example.rentini.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rentini.R;
 import com.example.rentini.models.Property;
+import com.example.rentini.ui.home.PropertyDetailActivity;
 
 import java.util.List;
 
@@ -57,6 +59,13 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         }
 
        // holder.featuresTextView.setText(featuresText);
+
+        // Gérer le clic sur l'élément
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PropertyDetailActivity.class);
+            intent.putExtra("property", property);  // Passer l'objet Property à l'activité de détails
+            context.startActivity(intent);
+        });
     }
 
     @Override

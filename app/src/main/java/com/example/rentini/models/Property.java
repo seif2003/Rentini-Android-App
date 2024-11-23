@@ -1,6 +1,8 @@
 package com.example.rentini.models;
 
-public class Property {
+import java.io.Serializable;
+
+public class Property implements Serializable {
     private String id;
     private String title;
     private String description;
