@@ -247,7 +247,7 @@
                 app:icon="@drawable/phone"
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
-                app:iconTint="@color/gray" />
+                app:iconTint="#a1a1a1" />
 
         </LinearLayout>
 
