@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference messagesRef;
     private List<Message> messages;
     private MessageAdapter adapter;
+    private String conversationId; // Add this field
     private ImageButton close;
 
     @Override
@@ -35,8 +37,18 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Initialize Firebase
-        messagesRef = FirebaseDatabase.getInstance().getReference("messages");
+        // Get conversation ID from intent
+        conversationId = getIntent().getStringExtra("conversationId");
+        if (conversationId == null) {
+            // Generate new conversation ID if not provided
+            conversationId = FirebaseDatabase.getInstance().getReference().push().getKey();
+        }
+
+        // Initialize Firebase with proper path
+        messagesRef = FirebaseDatabase.getInstance().getReference()
+            .child("conversations")
+            .child(conversationId)
+            .child("messages");
 
         // Initialize RecyclerView
         messages = new ArrayList<>();
@@ -50,13 +62,29 @@ public class ChatActivity extends AppCompatActivity {
             if (!messageText.isEmpty()) {
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (currentUser != null) {
+                    // Create message object
                     Message message = new Message(
-                        messageText, 
-                        currentUser.getUid(), 
+                        messageText,
+                        currentUser.getUid(),
                         System.currentTimeMillis()
                     );
-                    messagesRef.push().setValue(message);
-                    binding.messageInput.setText("");
+
+                    // Generate unique key for message
+                    String messageKey = messagesRef.push().getKey();
+                    if (messageKey != null) {
+                        // Save message using the generated key
+                        messagesRef.child(messageKey)
+                            .setValue(message)
+                            .addOnSuccessListener(aVoid -> {
+                                // Clear input after successful save
+                                binding.messageInput.setText("");
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(ChatActivity.this, 
+                                    "Failed to send message: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                            });
+                    }
                 }
             }
         });
@@ -83,7 +111,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildMoved(@NonNull DataSnapshot snapshot, String previousChildName) {}
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChatActivity.this,
+                    "Failed to load messages: " + error.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+            }
         });
 
         close = findViewById(R.id.close);
@@ -95,7 +127,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     protected void onDestroy() {
