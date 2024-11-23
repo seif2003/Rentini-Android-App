@@ -1,6 +1,9 @@
 package com.example.rentini;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference messagesRef;
     private List<Message> messages;
     private MessageAdapter adapter;
+    private ImageButton close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,17 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
+        close = findViewById(R.id.close);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
+
 
     @Override
     protected void onDestroy() {
