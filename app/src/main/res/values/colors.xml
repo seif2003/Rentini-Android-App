@@ -10,4 +10,6 @@
     <color name="darkBlue">#22215B</color>
     <color name="startColor">#917AFD</color>
     <color name="endColor">#6246EA</color>
+    <color name="transparent">#00000000</color>
+    <color name="violet">#7879F1</color>
 </resources>
