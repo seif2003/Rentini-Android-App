@@ -35,7 +35,7 @@
         android:layout_height="20dp"
         android:layout_marginTop="4dp"
         android:text="See all"
-        android:textColor="@color/violet"
+        android:textColor="@color/purple"
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.879"
