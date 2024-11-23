@@ -1,43 +1,97 @@
 package com.example.rentini.ui.home;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.rentini.R;
 import com.example.rentini.models.Property;
+import com.google.android.material.button.MaterialButton;
 
 public class PropertyDetailActivity extends AppCompatActivity {
 
-    private TextView titleTextView, descriptionTextView, priceTextView, roomsTextView, surfaceTextView;
+    private ImageView backButton;
+    private MaterialButton contact0, contact1, contact2;
+    private TextView roomsTextView ,surfaceTextView,titleTextView, locationTextView, priceTextView, descriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_detail);
 
-        // Initialiser les vues
+        // Initializing views
+        backButton = findViewById(R.id.backButton);
+        contact0 = findViewById(R.id.contact0);
+        contact1 = findViewById(R.id.contact1);
+        contact2 = findViewById(R.id.contact2);
         titleTextView = findViewById(R.id.titleTextView);
-        descriptionTextView = findViewById(R.id.descriptionTextView);
+        locationTextView = findViewById(R.id.locationTextView);
         priceTextView = findViewById(R.id.priceTextView);
+        ImageView propertyImage = findViewById(R.id.propertyImage);
+        ImageView ownerImage = findViewById(R.id.ownerImage);
+        descriptionTextView = findViewById(R.id.descriptionTextView);
         roomsTextView = findViewById(R.id.roomsTextView);
         surfaceTextView = findViewById(R.id.surfaceTextView);
 
-        // Obtenez les données passées à partir de l'intent
-        Property property = (Property) getIntent().getSerializableExtra("property");
+        String rooms = getIntent().getStringExtra("rooms");
+        String surface = getIntent().getStringExtra("surface");
+        String description = getIntent().getStringExtra("description");
+        Log.d("PropertyDetail", "rooms: " + rooms + ", surface: " + surface + ", description: " + description);
 
-        // Affichez les détails de la propriété
-        if (property != null) {
-            titleTextView.setText(property.getTitle());
+        if (description != null) {
+        roomsTextView.setText(rooms);
+        surfaceTextView.setText(surface);
+        descriptionTextView.setText(description);
+
+
+
+           /* titleTextView.setText(property.getTitle());
+            priceTextView.setText(String.format("%,.2f TND", property.getPrice()));
             descriptionTextView.setText(property.getDescription());
-            priceTextView.setText(String.format("TND %.2f", property.getPrice()));
-            roomsTextView.setText(String.format("Rooms: %d", property.getRooms()));
-            surfaceTextView.setText(String.format("Surface: %.2f sqm", property.getSurface()));
+            surfaceTextView.setText(String.format("%,.2f m²", property.getSurface()));
+            roomsTextView.setText(String.format("%d rooms", property.getRooms()));*/
+
+
+
+
+
         }
+
+        // Back Button logic (navigate back to the previous activity)
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
+
+        // Contact Button 0 (Message Intent - Explicit Intent)
+        contact0.setOnClickListener(v -> {
+            // Create an Intent to open messaging app
+            Intent messageIntent = new Intent(Intent.ACTION_SENDTO);
+            messageIntent.setData(Uri.parse("sms:")); // Send SMS Intent
+            messageIntent.putExtra("sms_body", "Hello, I am interested in the property details.");
+            startActivity(messageIntent);
+        });
+
+        // Contact Button 1 (Call Intent - Implicit Intent)
+        contact1.setOnClickListener(v -> {
+            // Assuming the phone number is already defined
+            String phoneNumber = "+1234567890"; // Replace with actual phone number
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + phoneNumber));
+            startActivity(callIntent);
+        });
+
+        // Contact Button 2 (Call Intent - Implicit Intent with different styling)
+        contact2.setOnClickListener(v -> {
+            // Assuming the phone number is already defined
+            String phoneNumber = "+1234567890"; // Replace with actual phone number
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + phoneNumber));
+            startActivity(callIntent);
+        });
     }
 }
