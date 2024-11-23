@@ -3,7 +3,6 @@ package com.example.rentini;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -51,7 +50,7 @@ public class SignUp extends AppCompatActivity {
         TextInputEditText password = findViewById(R.id.passwordField);
         TextInputEditText confPassword = findViewById(R.id.confirmPasswordField);
 
-        Button login = findViewById(R.id.button);
+        Button login = findViewById(R.id.logout_button);
 
         login.setOnClickListener(view -> {
             // Get all input values

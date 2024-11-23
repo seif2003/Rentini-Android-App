@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-20dp"
-        android:fontFamily="@font/hind_bold"
         android:text="@string/app_name"
+        android:fontFamily="@font/hind_bold"
         android:textColor="@color/darkBlue"
         android:textSize="42dp"
         android:textStyle="bold"
@@ -67,11 +67,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="You are one step away."
-        app:layout_constraintStart_toStartOf="@+id/button"
+        app:layout_constraintStart_toStartOf="@+id/logout_button"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
+        android:id="@+id/logout_button"
         android:layout_width="350dp"
         android:layout_height="51dp"
         android:layout_marginTop="52dp"
