@@ -35,7 +35,7 @@ public class PropertyDetailActivity extends AppCompatActivity {
         if (property != null) {
             titleTextView.setText(property.getTitle());
             descriptionTextView.setText(property.getDescription());
-            priceTextView.setText(String.format("Price: $%.2f", property.getPrice()));
+            priceTextView.setText(String.format("TND %.2f", property.getPrice()));
             roomsTextView.setText(String.format("Rooms: %d", property.getRooms()));
             surfaceTextView.setText(String.format("Surface: %.2f sqm", property.getSurface()));
         }

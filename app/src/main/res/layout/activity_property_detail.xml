@@ -1,65 +1,255 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/back"
-        android:layout_marginBottom="15dp"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="378dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="35dp"
-        android:src="@drawable/detailsmaision" />
+        <!-- Header with Back Button and Share -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="382dp"
-        android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:text="Title"
-        android:textColor="@color/darkBlue"
-        android:textSize="22dp"
-        android:textStyle="bold" />
-    <TextView
-        android:id="@+id/roomsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rooms"
-        android:textSize="16sp"
-        android:paddingBottom="8dp"/>
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/back"/>
 
-    <TextView
-        android:id="@+id/surfaceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Surface"
-        android:textSize="16sp"
-        android:paddingBottom="8dp"/>
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textSize="16sp"
-        android:paddingBottom="8dp"/>
+        <!-- Property Image with Indicator -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp">
 
-    <TextView
-        android:id="@+id/priceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price"
-        android:textSize="16sp"
-        android:paddingBottom="8dp"/>
+            <ImageView
+                android:id="@+id/propertyImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:text="1/11"
+                android:textColor="@android:color/white"
+                android:background="#80000000"
+                android:padding="4dp"/>
+        </RelativeLayout>
 
-</LinearLayout>
+        <!-- Property Title and Location -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/hind_bold"
+            android:text="Entire Bromo mountain view Cabin in Surabaya"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/location"
+            android:text="Location" />
+
+        <!-- Price -->
+
+        <!-- Property Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/roomsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/hind_bold" />
+
+            <TextView
+                android:id="@+id/surfaceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/hind_bold"/>
+        </LinearLayout>
+
+        <!-- Owner Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/ownerImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/profile"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/hind_bold"
+                android:text="Seif Ddine Ben Amara"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/contact0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient_button_background"
+                app:backgroundTint="@null"
+                app:icon="@drawable/message"
+                app:iconSize="24dp"
+                app:iconGravity="textStart"
+                app:cornerRadius="118dp" />
+
+        </LinearLayout>
+
+        <!-- Facilities -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Home facilities"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/air"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/hind_medium"
+                android:text="Air conditioner" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/kitchen"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/hind_medium"
+                android:text="Kitchen" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/parking"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/hind_medium"
+                android:text="Free parking" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/wifi"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/hind_medium"
+                android:text="Free WiFi" />
+        </LinearLayout>
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/hind_bold"
+            android:text="Description"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/hind_medium"
+            android:text="This cabin comes with Smart Home System and beautiful viking style. You can see sunrise in the morning with City View from full Glass Window.\n\nThis unit is surrounded by business district of West Surabaya that offers you the city life as well as wide range of culinary.\n\nThis apartment equipped with Washing Machine, Eletric Stove, Microwave, Refrigerator, Cutlery."
+            android:textColor="#666666" />
+
+        <!-- Price and Contact Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/priceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$526"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/month"
+                    android:textColor="#666666" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/contact1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient_button_background"
+                android:text="Contact"
+                android:textColor="@android:color/white"
+                android:textSize="20dp"
+                app:backgroundTint="@null"
+                app:cornerRadius="118dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/contact2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/gradient_button_background2"
+                app:backgroundTint="@null"
+                app:cornerRadius="118dp"
+                app:icon="@drawable/phone"
+                app:iconGravity="textStart"
+                app:iconSize="24dp"
+                app:iconTint="@color/gray" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
