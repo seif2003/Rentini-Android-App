@@ -22,6 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/back"/>
 
         </RelativeLayout>
@@ -107,6 +108,7 @@
                 android:src="@drawable/profile"/>
 
             <TextView
+                android:id="@+id/ownerNameTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -144,39 +146,58 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/ac"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:drawableStart="@drawable/air"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/hind_medium"
-                android:text="Air conditioner" />
+                android:text="Air conditioner"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/kitchen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:drawableStart="@drawable/kitchen"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/hind_medium"
-                android:text="Kitchen" />
+                android:text="Kitchen"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/parking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:drawableStart="@drawable/parking"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/hind_medium"
-                android:text="Free parking" />
+                android:text="Free parking"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/wifi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/wifi"
                 android:drawablePadding="8dp"
                 android:fontFamily="@font/hind_medium"
-                android:text="Free WiFi" />
+                android:text="Free WiFi"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/furnished"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_home_black_24dp"
+                android:drawablePadding="8dp"
+                android:drawableTint="#7E7F87"
+                android:fontFamily="@font/hind_medium"
+                android:text="Furnished"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- Description -->
@@ -219,6 +240,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/typeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="/month"
