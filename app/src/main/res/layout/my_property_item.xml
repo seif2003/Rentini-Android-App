@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Image de la propriété -->
+    <ImageView
+        android:id="@+id/property_image"
+        android:layout_width="120dp"
+        android:layout_height="201dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/sample_image" />
+
+    <!-- Conteneur des détails de la propriété -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="16dp">
+
+        <!-- Titre de la propriété -->
+        <TextView
+            android:id="@+id/property_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hind_medium"
+            android:text="Titre"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/property_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hind_medium"
+            android:text="Petite maison avec vue"
+            android:textSize="14dp"
+            android:textColor="@android:color/darker_gray" />
+
+        <!-- Localisation -->
+        <TextView
+            android:id="@+id/localisation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hind_medium"
+            android:text="Adresse : Kadaghari, Kathmandu"
+            android:textColor="#7D7F88" />
+
+        <!-- Détails (pièces, surface) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/property_rooms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/hind_medium"
+                android:text="3 pièces"
+                android:textColor="#7D7F88" />
+
+            <TextView
+                android:id="@+id/property_surface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/hind_medium"
+                android:text="320 m²"
+                android:textColor="#7D7F88" />
+        </LinearLayout>
+
+        <!-- Prix -->
+        <TextView
+            android:id="@+id/property_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hind_bold"
+            android:text="526 TND"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="8dp" />
+
+        <!-- Boutons Modifier et Supprimer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="8dp">
+
+            <!-- Bouton Modifier -->
+            <ImageButton
+                android:id="@+id/btn_edit"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Modifier"
+                app:srcCompat="@drawable/modifier"
+                 />
+
+            <!-- Bouton Supprimer -->
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Supprimer"
+                app:srcCompat="@drawable/delete"
+                app:tint="@android:color/holo_red_dark" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

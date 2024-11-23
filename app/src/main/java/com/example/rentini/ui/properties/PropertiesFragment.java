@@ -26,4 +26,6 @@ public class PropertiesFragment extends Fragment {
         });
         return view;
     }
+
+
 }

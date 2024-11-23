@@ -69,7 +69,7 @@ public class PropertyDetailActivity extends AppCompatActivity {
 
         // Contact Button 0 (Message Intent - Explicit Intent)
         contact0.setOnClickListener(v -> {
-            
+
         });
 
         // Contact Button 1 (Call Intent - Implicit Intent)
