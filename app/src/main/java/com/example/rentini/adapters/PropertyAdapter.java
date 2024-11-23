@@ -66,18 +66,18 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         holder.itemView.setOnClickListener(v -> {
             Log.d("PropertyAdapter", "Clicked on property: " + property.getTitle());
             Intent intent = new Intent(context, PropertyDetailActivity.class);
-            intent.putExtra("title",property.getTitle());
-            intent.putExtra("description", property.getDescription());
-            intent.putExtra("price", property.getPrice());
-            intent.putExtra("type", property.getType());
             intent.putExtra("rooms", property.getRooms());
-            Log.d("PropertyAdapter", "rooms: " + property.getRooms());
-            Log.d("PropertyAdapter", "surface: " + property.getSurface());
             intent.putExtra("surface", property.getSurface());
-            intent.putExtra("latitude", property.getLatitude());
-            intent.putExtra("longitude", property.getLongitude());
-            intent.putExtra("userId", property.getUserId());
-            intent.putExtra("features", finalFeaturesText); // Passer les équipements à l'activité de détails")
+            intent.putExtra("price", property.getPrice());
+            intent.putExtra("title", property.getTitle());
+            intent.putExtra("description", property.getDescription());
+            intent.putExtra("type", property.getType());
+            intent.putExtra("ownerId", property.getUserId());
+            intent.putExtra("hasWifi", property.isHasWifi());
+            intent.putExtra("hasParking", property.isHasParking());
+            intent.putExtra("hasKitchen", property.isHasKitchen());
+            intent.putExtra("hasAirConditioner", property.isHasAirConditioning());
+            intent.putExtra("isFurnished", property.isHasFurnished());
             context.startActivity(intent);
         });
     }
