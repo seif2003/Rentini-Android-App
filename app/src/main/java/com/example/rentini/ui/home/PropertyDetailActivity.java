@@ -113,10 +113,12 @@ public class PropertyDetailActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> finish());
         
         contact0.setOnClickListener(v -> {
+
             String ownerId = getIntent().getStringExtra("ownerId");
             Intent chatIntent = new Intent(this, ChatActivity.class);
             chatIntent.putExtra("otherUserId", ownerId);
             startActivity(chatIntent);
+
         });
     }
 }
