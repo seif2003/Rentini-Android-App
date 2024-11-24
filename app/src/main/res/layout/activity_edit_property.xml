@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Champ de titre -->
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Titre de la propriété"
+        android:inputType="text" />
+
+    <!-- Champ de description -->
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:inputType="text" />
+
+    <!-- Champ du nombre de chambres -->
+    <EditText
+        android:id="@+id/editRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de chambres"
+        android:inputType="number" />
+
+    <!-- Champ de la surface -->
+    <EditText
+        android:id="@+id/editSurface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Surface (m²)"
+        android:inputType="number" />
+
+    <!-- Champ du prix -->
+    <EditText
+        android:id="@+id/editPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Prix"
+        android:inputType="numberDecimal" />
+
+    <!-- Bouton pour enregistrer -->
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enregistrer"
+        android:layout_gravity="center" />
+
+</LinearLayout>

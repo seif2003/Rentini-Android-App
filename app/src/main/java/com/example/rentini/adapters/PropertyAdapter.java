@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,6 +62,29 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
        // holder.featuresTextView.setText(featuresText);
 
+        // Mettre à jour l'apparence initiale du bouton
+        if (property.isSaved()) {
+            holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
+        } else {
+            holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+        }
+
+        // Écouteur de clic sur le bouton de sauvegarde
+        holder.saveButton.setOnClickListener(v -> {
+            if (property.isSaved()) {
+                // Désélectionner
+                property.setSaved(false);
+                holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+                Log.d("PropertyAdapter", "Unsaved property: " + property.getTitle());
+            } else {
+                // Sauvegarder
+                property.setSaved(true);
+                holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
+                Log.d("PropertyAdapter", "Saved property: " + property.getTitle() + " by user: " + property.getUserId());
+            }
+            // Mettez à jour la base de données ou sauvegardez l'état si nécessaire
+        });
+
         // Gérer le clic sur l'élément
         String finalFeaturesText = featuresText;
         holder.itemView.setOnClickListener(v -> {
@@ -95,6 +119,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         TextView roomsTextView;
         TextView surfaceTextView;
         TextView featuresTextView;
+        ImageButton saveButton;
 
         public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,6 +130,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             roomsTextView = itemView.findViewById(R.id.property_rooms);
             surfaceTextView = itemView.findViewById(R.id.property_surface);
             //featuresTextView = itemView.findViewById(R.id.property_features);
+            saveButton = itemView.findViewById(R.id.save_property);
         }
     }
 }

@@ -18,7 +18,7 @@ public class Property implements Serializable {
     private boolean hasKitchen;
     private boolean hasAirConditioning;
     private boolean hasFurnished;
-    private boolean saved;
+    private boolean isSaved;
 
     // Default constructor
     public Property() {}
@@ -43,7 +43,7 @@ public class Property implements Serializable {
         this.hasKitchen = hasKitchen;
         this.hasAirConditioning = hasAirConditioning;
         this.hasFurnished = hasFurnished;
-        this.saved = false; // Initialize saved as false
+        this.isSaved = false; // Initialize saved as false
     }
 
     // Getters and Setters for all attributes
@@ -165,6 +165,14 @@ public class Property implements Serializable {
 
     public void setHasFurnished(boolean hasFurnished) {
         this.hasFurnished = hasFurnished;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
     }
 }
 
