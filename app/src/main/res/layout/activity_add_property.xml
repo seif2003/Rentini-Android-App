@@ -49,7 +49,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/propertyTitleInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Property Type Selector -->
@@ -76,7 +76,7 @@
                     android:id="@+id/propertyTypeDropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"/>
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Price Input -->
@@ -92,10 +92,9 @@
                     android:id="@+id/priceInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
 
 
         <!-- Rooms and Surface Row -->
@@ -124,7 +123,7 @@
                     android:id="@+id/roomsInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Surface Input -->
@@ -140,7 +139,7 @@
                     android:id="@+id/surfaceInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -157,17 +156,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minLines="3"
-                android:gravity="top"/>
+                android:gravity="top" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Upload Pictures Button -->
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/uploadPictures"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Upload Property Pictures"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            app:icon="@drawable/upload"/>
+            app:icon="@drawable/upload" />
+        <!-- Image Preview Section -->
+        <LinearLayout
+            android:id="@+id/imagePreviewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+        </LinearLayout>
 
         <!-- Home Facilities Section -->
         <TextView
@@ -176,7 +184,7 @@
             android:text="Home facilities"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" />
 
         <!-- Home Facilities Checkboxes -->
         <LinearLayout
@@ -189,31 +197,31 @@
                 android:id="@+id/wifiCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="WiFi"/>
+                android:text="WiFi" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/parkingCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Parking"/>
+                android:text="Parking" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/kitchenCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Kitchen"/>
+                android:text="Kitchen" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/airConditionerCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Air Conditioner"/>
+                android:text="Air Conditioner" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/furnishedCheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Furnished"/>
+                android:text="Furnished" />
         </LinearLayout>
 
         <!-- Nearest Public Facilities Section -->
@@ -231,7 +239,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="I agree to the terms and condition"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <!-- Submit Button -->
         <com.google.android.material.button.MaterialButton
