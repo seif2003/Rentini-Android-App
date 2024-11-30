@@ -2,6 +2,9 @@ package com.example.rentini.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +51,27 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         holder.priceTextView.setText(String.format("%,.2f TND / %s", property.getPrice(), property.getType()));
         holder.roomsTextView.setText("Rooms: " + property.getRooms());
         holder.surfaceTextView.setText("Surface: " + property.getSurface() + " m²");
+        // Convertir la première image en bitmap
+        if (property.getImages() != null && !property.getImages().isEmpty()) {
+            try {
+                String image = property.getImages().get(0);
+                Log.d("image",image);
+                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                
+                if (decodedByte != null) {
+                    holder.propertyImageView.setImageBitmap(decodedByte);
+                } else {
+                    Log.e("PropertyAdapter", "Failed to decode image bitmap");
+                    // Set a placeholder image
+                    holder.propertyImageView.setImageResource(R.drawable.detailsmaision);
+                }
+            } catch (IllegalArgumentException e) {
+                Log.e("PropertyAdapter", "Error decoding base64: " + e.getMessage());
+                // Set a placeholder image
+                holder.propertyImageView.setImageResource(R.drawable.detailsmaision);
+            }
+        }
 
         // Construire une chaîne pour les équipements
         StringBuilder features = new StringBuilder();
@@ -183,4 +207,5 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             saveButton = itemView.findViewById(R.id.save_property);
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package com.example.rentini.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Property implements Serializable {
     private String id;
@@ -19,6 +20,7 @@ public class Property implements Serializable {
     private boolean hasAirConditioning;
     private boolean hasFurnished;
     private boolean isSaved;
+    private List<String> images;
 
     // Default constructor
     public Property() {}
@@ -28,7 +30,7 @@ public class Property implements Serializable {
                    int rooms, double surface, double latitude, double longitude, 
                    String userId, boolean hasWifi, boolean hasParking, 
                    boolean hasKitchen, boolean hasAirConditioning, 
-                   boolean hasFurnished) {
+                   boolean hasFurnished,List<String> images) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -45,6 +47,7 @@ public class Property implements Serializable {
         this.hasAirConditioning = hasAirConditioning;
         this.hasFurnished = hasFurnished;
         this.isSaved = false; // Initialize saved as false
+        this.images = images;
     }
 
     // Getters and Setters for all attributes
@@ -174,6 +177,14 @@ public class Property implements Serializable {
 
     public void setSaved(boolean saved) {
         isSaved = saved;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+    
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }
 

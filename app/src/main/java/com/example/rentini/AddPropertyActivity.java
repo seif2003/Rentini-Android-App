@@ -3,23 +3,28 @@ package com.example.rentini;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.rentini.databinding.ActivityAddPropertyBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,9 +40,11 @@ import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 
-import com.example.rentini.models.Property;
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddPropertyActivity extends AppCompatActivity {
@@ -48,6 +55,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private static final int PERMISSION_REQUEST_CODE = 123;
+    private static final int PICK_IMAGES_REQUEST = 1;
+    private List<Uri> selectedImageUris = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +76,13 @@ public class AddPropertyActivity extends AppCompatActivity {
         initializeMap();
         setupPropertyTypeSpinner();
         setupSubmitButton();
+        setupImageUpload();
 
         ImageButton ib = findViewById(R.id.close);
 
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);*/
                 finish();
             }
         });
@@ -94,8 +102,62 @@ public class AddPropertyActivity extends AppCompatActivity {
         binding.submit.setOnClickListener(v -> submitProperty());
     }
 
+    private void setupImageUpload() {
+        binding.uploadPictures.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            startActivityForResult(intent, PICK_IMAGES_REQUEST);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (requestCode == PICK_IMAGES_REQUEST && resultCode == RESULT_OK) {
+            // Clear previous selections
+            selectedImageUris.clear();
+            binding.imagePreviewLayout.removeAllViews();
+
+            if (data != null) {
+                // Multiple image selection
+                if (data.getClipData() != null) {
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        selectedImageUris.add(imageUri);
+                        addImagePreview(imageUri);
+                    }
+                } 
+                // Single image selection
+                else if (data.getData() != null) {
+                    Uri imageUri = data.getData();
+                    selectedImageUris.add(imageUri);
+                    addImagePreview(imageUri);
+                }
+            }
+        }
+    }
+
+    private void addImagePreview(Uri imageUri) {
+        ImageView imageView = new ImageView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+            200, 200  // Adjust size as needed
+        );
+        params.setMargins(8, 0, 8, 0);
+        imageView.setLayoutParams(params);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        
+        Glide.with(this)
+            .load(imageUri)
+            .into(imageView);
+        
+        binding.imagePreviewLayout.addView(imageView);
+    }
+
     private void submitProperty() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        
         if (currentUser == null) {
             Toast.makeText(this, "Please sign in to add a property", Toast.LENGTH_SHORT).show();
             return;
@@ -104,6 +166,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         // Create a Map for Firestore
         Map<String, Object> propertyMap = new HashMap<>();
         try {
+            // Existing property details
             propertyMap.put("title", binding.propertyTitleInput.getText().toString());
             propertyMap.put("description", binding.descriptionInput.getText().toString());
             propertyMap.put("type", binding.propertyTypeDropdown.getText().toString());
@@ -114,6 +177,19 @@ public class AddPropertyActivity extends AppCompatActivity {
             propertyMap.put("longitude", selectedLocation.getLongitude());
             propertyMap.put("userId", currentUser.getUid());
             propertyMap.put("timestamp", FieldValue.serverTimestamp());
+
+            // Convert images to Base64 encoded strings
+            List<String> base64Images = new ArrayList<>();
+            for (Uri imageUri : selectedImageUris) {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                base64Images.add(Base64.encodeToString(byteArray, Base64.DEFAULT));
+            }
+
+            // Add base64 encoded images to property map
+            propertyMap.put("images", base64Images);
 
             // Facilities
             propertyMap.put("hasWifi", binding.wifiCheckbox.isChecked());
@@ -157,7 +233,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         mapController.setZoom(15.0);
 
         // Set default location (e.g., Paris)
-        GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
+        GeoPoint startPoint = new GeoPoint(36.4367221, 10.6823373);
         mapController.setCenter(startPoint);
 
         // Add click listener for marker placement
