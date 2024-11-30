@@ -1,7 +1,11 @@
 package com.example.rentini.ui.home;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,11 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.rentini.Filtre;
 import com.example.rentini.R;
 import com.example.rentini.adapters.PropertyAdapter;
 import com.example.rentini.models.Property;
@@ -28,11 +35,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-
+    ImageButton  filtreButton;
     private RecyclerView recyclerView;
     private PropertyAdapter adapter;
     private List<Property> propertyList;
     private FirebaseFirestore db;
+    private ActivityResultLauncher<Intent> filterActivityResultLauncher;
+
 
     @Nullable
     @Override
@@ -42,6 +51,7 @@ public class HomeFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         // Initialize Firebase Firestore
         db = FirebaseFirestore.getInstance();
@@ -150,5 +160,7 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(getContext(), "Failed to fetch saved properties: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
+
 
 }

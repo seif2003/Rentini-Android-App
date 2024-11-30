@@ -3,69 +3,68 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    tools:context=".FilterActivity">
+    tools:context=".Filtre">
 
     <!-- Back Button -->
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="41dp"
         android:layout_height="43dp"
-        android:background=""
+        android:background="@null"
         android:src="@drawable/back"
         android:contentDescription="Back"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintMarginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+         />
 
     <!-- Price Range Text -->
-
-    <!-- Price Range Slider -->
-
     <TextView
         android:id="@+id/priceRangeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Price range"
         android:textColor="#000"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintMarginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton" />
+        app:layout_constraintTop_toBottomOf="@id/backButton" />
 
+    <!-- Price Range Slider -->
+
+    <!-- Period Chips -->
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/priceRangeSlider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:stepSize="100"
         android:valueFrom="1200"
         android:valueTo="3000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintMarginBottom="150dp"
-        app:layout_constraintMarginEnd="16dp"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceRangeText" />
 
-    <!-- Period Chips -->
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/priceRangeText" />
+
+    <!-- Property Facilities Text -->
+
+    <!-- Facilities Chips -->
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/periodChipGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintMarginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceRangeSlider"
+
+        app:layout_constraintTop_toBottomOf="@id/priceRangeSlider"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
@@ -88,39 +87,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Annually" />
-
     </com.google.android.material.chip.ChipGroup>
 
-    <!-- Property Facilities Text -->
     <TextView
         android:id="@+id/propertyFacilitiesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
         android:text="Property facilities"
         android:textColor="#000"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintMarginStart="16dp"
-        app:layout_constraintMarginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/periodChipGroup" />
+        app:layout_constraintTop_toBottomOf="@id/periodChipGroup" />
 
-    <!-- Facilities Chips -->
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/facilitiesChipGroup"
-        android:layout_width="339dp"
-        android:layout_height="108dp"
-        android:layout_marginTop="44dp"
-        android:chipSpacing="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
-        app:layout_constraintMarginEnd="16dp"
-        app:layout_constraintMarginStart="16dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:chipSpacingHorizontal="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/propertyFacilitiesText"
-        app:singleSelection="false">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/propertyFacilitiesText">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipWifi"
@@ -156,22 +148,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Furnished" />
-
     </com.google.android.material.chip.ChipGroup>
 
     <!-- Reset and Show Results Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/facilitiesChipGroup"
-        app:layout_constraintVertical_bias="0.74">
+        app:layout_constraintTop_toBottomOf="@id/facilitiesChipGroup"
+        app:layout_constraintVertical_bias="0.584"
+        tools:layout_editor_absoluteX="0dp">
 
         <Button
             android:id="@+id/resetButton"

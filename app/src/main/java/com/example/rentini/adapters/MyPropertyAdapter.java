@@ -4,6 +4,10 @@ import static java.lang.String.valueOf;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +55,27 @@ public class MyPropertyAdapter extends RecyclerView.Adapter<MyPropertyAdapter.Pr
         holder.rooms.setText(property.getRooms() + " pièces");
         holder.surface.setText(property.getSurface() + " m²");
         holder.price.setText(String.format("%.2f TND", property.getPrice()));
+        // Convertir la première image en bitmap
+        if (property.getImages() != null && !property.getImages().isEmpty()) {
+            try {
+                String image = property.getImages().get(0);
+                Log.d("image",image);
+                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                if (decodedByte != null) {
+                    holder.propertyImageView.setImageBitmap(decodedByte);
+                } else {
+                    Log.e("PropertyAdapter", "Failed to decode image bitmap");
+                    // Set a placeholder image
+                    holder.propertyImageView.setImageResource(R.drawable.detailsmaision);
+                }
+            } catch (IllegalArgumentException e) {
+                Log.e("PropertyAdapter", "Error decoding base64: " + e.getMessage());
+                // Set a placeholder image
+                holder.propertyImageView.setImageResource(R.drawable.detailsmaision);
+            }
+        }
 
         // Bouton Modifier
         holder.btnEdit.setOnClickListener(v -> {
@@ -124,12 +149,11 @@ public class MyPropertyAdapter extends RecyclerView.Adapter<MyPropertyAdapter.Pr
 
     static class PropertyViewHolder extends RecyclerView.ViewHolder {
         TextView title, description, location, rooms, surface, price;
-        ImageView image;
+        ImageView propertyImageView;
         ImageButton btnEdit, btnDelete;
 
         public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.property_image);
             title = itemView.findViewById(R.id.property_title);
             description = itemView.findViewById(R.id.property_description);
             location = itemView.findViewById(R.id.localisation);
@@ -138,6 +162,7 @@ public class MyPropertyAdapter extends RecyclerView.Adapter<MyPropertyAdapter.Pr
             price = itemView.findViewById(R.id.property_price);
             btnEdit = itemView.findViewById(R.id.btn_edit);
             btnDelete = itemView.findViewById(R.id.btn_delete);
+            propertyImageView = itemView.findViewById(R.id.property_image);
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.example.rentini.adapters;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rentini.R;
 import com.example.rentini.models.Property;
 import com.example.rentini.ui.home.PropertyDetailActivity;
+import com.example.rentini.Filtre;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,7 +62,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
                 Log.d("image",image);
                 byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                
+
                 if (decodedByte != null) {
                     holder.propertyImageView.setImageBitmap(decodedByte);
                 } else {
@@ -108,9 +112,8 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             intent.putExtra("hasAirConditioner", property.isHasAirConditioning());
             intent.putExtra("isFurnished", property.isHasFurnished());
             context.startActivity(intent);
-
-
         });
+
         // Set initial save button state
         updateSaveButtonState(holder.saveButton, property);
 
@@ -130,6 +133,8 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             property.setSaved(!property.isSaved());
             updateSaveButtonState(holder.saveButton, property);
         });
+
+
     }
     public void removeFromSaved(Property property) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -193,7 +198,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         TextView roomsTextView;
         TextView surfaceTextView;
         TextView featuresTextView;
-        ImageButton saveButton;
+        ImageButton saveButton, filtreButton;
 
         public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -205,6 +210,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             surfaceTextView = itemView.findViewById(R.id.property_surface);
             //featuresTextView = itemView.findViewById(R.id.property_features);
             saveButton = itemView.findViewById(R.id.save_property);
+            filtreButton= itemView.findViewById(R.id.filter);
         }
     }
 
