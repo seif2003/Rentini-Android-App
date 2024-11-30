@@ -5,6 +5,15 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Titre de la page -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modifier la propriété"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:textColor="@color/darkBlue"
+        android:layout_marginBottom="16dp"/>
+
     <!-- Champ de titre -->
     <EditText
         android:id="@+id/editTitle"
@@ -45,12 +54,20 @@
         android:hint="Prix"
         android:inputType="numberDecimal" />
 
+    <!-- Carte de localisation -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp" />
+
     <!-- Bouton pour enregistrer -->
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enregistrer"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp" />
 
 </LinearLayout>

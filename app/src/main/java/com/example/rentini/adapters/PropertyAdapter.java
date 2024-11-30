@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rentini.R;
 import com.example.rentini.models.Property;
 import com.example.rentini.ui.home.PropertyDetailActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -62,28 +65,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
        // holder.featuresTextView.setText(featuresText);
 
-        // Mettre à jour l'apparence initiale du bouton
-        if (property.isSaved()) {
-            holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
-        } else {
-            holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.white));
-        }
-
-        // Écouteur de clic sur le bouton de sauvegarde
-        holder.saveButton.setOnClickListener(v -> {
-            if (property.isSaved()) {
-                // Désélectionner
-                property.setSaved(false);
-                holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.white));
-                Log.d("PropertyAdapter", "Unsaved property: " + property.getTitle());
-            } else {
-                // Sauvegarder
-                property.setSaved(true);
-                holder.saveButton.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
-                Log.d("PropertyAdapter", "Saved property: " + property.getTitle() + " by user: " + property.getUserId());
-            }
-            // Mettez à jour la base de données ou sauvegardez l'état si nécessaire
-        });
 
         // Gérer le clic sur l'élément
         String finalFeaturesText = featuresText;
@@ -103,8 +84,77 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             intent.putExtra("hasAirConditioner", property.isHasAirConditioning());
             intent.putExtra("isFurnished", property.isHasFurnished());
             context.startActivity(intent);
+
+
+        });
+        // Set initial save button state
+        updateSaveButtonState(holder.saveButton, property);
+
+        holder.saveButton.setOnClickListener(v -> {
+            // Si la propriété est sauvegardée, la supprimer, sinon l'ajouter
+            if (property.isSaved()) {
+                // Supprimer de la liste des favoris
+                updateSaveButtonState(holder.saveButton, property);
+                removeFromSaved(property);
+            } else {
+                // Ajouter à la liste des favoris
+                updateSaveButtonState(holder.saveButton, property);
+                savePropertyToUserFavorites(property);
+            }
+
+            // Basculer l'état de la propriété
+            property.setSaved(!property.isSaved());
+            updateSaveButtonState(holder.saveButton, property);
         });
     }
+    public void removeFromSaved(Property property) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) return;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .document(currentUser.getUid())
+                .collection("savedProperties")
+                .document(property.getId()) // Utiliser l'ID de la propriété
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    notifyDataSetChanged(); // Rafraîchir l'adaptateur
+                    Log.d("PropertyAdapter", "Propriété supprimée des favoris.");
+                })
+                .addOnFailureListener(e -> Log.e("PropertyAdapter", "Erreur lors de la suppression de la propriété.", e));
+    }
+
+    private void updateSaveButtonState(ImageButton saveButton, Property property) {
+        if (property.isSaved()) {
+            saveButton.setImageResource(R.drawable.redheart); // Red filled heart
+        } else {
+            saveButton.setImageResource(R.drawable.heart); // Outline heart
+        }
+    }
+
+    private void savePropertyToUserFavorites(Property property) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Log.e("PropertyAdapter", "User not authenticated.");
+            return;
+        }
+
+        String propertyId = property.getId();
+        if (propertyId == null || propertyId.isEmpty()) {
+            Log.e("PropertyAdapter", "Property ID is null or empty.");
+            return;
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .document(currentUser.getUid())
+                .collection("savedProperties")
+                .document(propertyId)
+                .set(property)
+                .addOnSuccessListener(aVoid -> Log.d("PropertyAdapter", "Property saved successfully."))
+                .addOnFailureListener(e -> Log.e("PropertyAdapter", "Error saving property: ", e));
+    }
+
 
     @Override
     public int getItemCount() {

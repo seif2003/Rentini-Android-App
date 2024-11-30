@@ -24,11 +24,12 @@ public class Property implements Serializable {
     public Property() {}
 
     // Updated constructor
-    public Property(String title, String description, String type, double price, 
+    public Property(String id,String title, String description, String type, double price,
                    int rooms, double surface, double latitude, double longitude, 
                    String userId, boolean hasWifi, boolean hasParking, 
                    boolean hasKitchen, boolean hasAirConditioning, 
                    boolean hasFurnished) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.type = type;

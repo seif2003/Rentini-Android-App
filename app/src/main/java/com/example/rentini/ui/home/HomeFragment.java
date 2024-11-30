@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.rentini.R;
 import com.example.rentini.adapters.PropertyAdapter;
 import com.example.rentini.models.Property;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -76,11 +78,11 @@ public class HomeFragment extends Fragment {
                             boolean hasKitchen = document.getBoolean("hasKitchen");
                             boolean hasAirConditioning = document.getBoolean("hasAirConditioning");
                             boolean hasFurnished = document.getBoolean("hasFurnished");
-
-
+                            String documentId = document.getId();
 
                             // Create a Property object
                             Property property = new Property(
+                                    documentId,
                                     title,
                                     description,
                                     type,
@@ -101,13 +103,49 @@ public class HomeFragment extends Fragment {
                             propertyList.add(property);
                         }
 
-                        // Update the RecyclerView with the fetched properties
-                        adapter = new PropertyAdapter(getContext(), propertyList);
-                        recyclerView.setAdapter(adapter);
+                        // Now, fetch the saved properties for the current user
+                        fetchSavedPropertiesForUser();
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to fetch properties: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
+    private void fetchSavedPropertiesForUser() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            return;
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .document(currentUser.getUid())
+                .collection("savedProperties")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null) {
+                        List<DocumentSnapshot> savedDocuments = queryDocumentSnapshots.getDocuments();
+
+                        // Go through the saved properties and mark them as saved in the propertyList
+                        for (DocumentSnapshot savedDoc : savedDocuments) {
+                            String savedPropertyId = savedDoc.getId();
+
+                            for (Property property : propertyList) {
+                                if (property.getId().equals(savedPropertyId)) {
+                                    property.setSaved(true); // Mark property as saved
+                                }
+                            }
+                        }
+
+                        // After updating the saved state, set the adapter to the RecyclerView
+                        adapter = new PropertyAdapter(getContext(), propertyList);
+                        recyclerView.setAdapter(adapter);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to fetch saved properties: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
 }

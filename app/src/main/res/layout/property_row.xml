@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="#00FFFFFF"
             app:srcCompat="@drawable/heart" />
 
     </LinearLayout>
