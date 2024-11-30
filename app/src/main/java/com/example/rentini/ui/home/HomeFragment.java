@@ -79,6 +79,8 @@ public class HomeFragment extends Fragment {
                             boolean hasAirConditioning = document.getBoolean("hasAirConditioning");
                             boolean hasFurnished = document.getBoolean("hasFurnished");
                             String documentId = document.getId();
+                            List<String> images = (List<String>) document.get("images");
+
 
                             // Create a Property object
                             Property property = new Property(
@@ -96,7 +98,8 @@ public class HomeFragment extends Fragment {
                                     hasParking,
                                     hasKitchen,
                                     hasAirConditioning,
-                                    hasFurnished
+                                    hasFurnished,
+                                    images
                             );
 
                             // Add the property to the list
