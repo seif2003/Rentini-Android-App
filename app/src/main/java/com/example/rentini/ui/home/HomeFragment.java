@@ -3,12 +3,10 @@ package com.example.rentini.ui.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,29 +17,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import com.example.rentini.Filtre;
 import com.example.rentini.R;
 import com.example.rentini.adapters.PropertyAdapter;
 import com.example.rentini.models.Property;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
-    ImageButton  filtreButton;
+    private ImageButton filtreButton;
     private RecyclerView recyclerView;
     private PropertyAdapter adapter;
-    private List<Property> propertyList;
+    private List<Property> propertyList = new ArrayList<>();
+    private List<Property> originalPropertyList = new ArrayList<>();
     private FirebaseFirestore db;
     private ActivityResultLauncher<Intent> filterActivityResultLauncher;
-
 
     @Nullable
     @Override
@@ -49,118 +45,192 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
-        // Initialize Firebase Firestore
-        db = FirebaseFirestore.getInstance();
-
-        // Initialize the property list
-        propertyList = new ArrayList<>();
-
-        // Fetch properties from Firestore
+        initializeViews(view);
+        setupFilterLauncher();
         fetchPropertiesFromFirestore();
 
         return view;
     }
 
-    private void fetchPropertiesFromFirestore() {
-        CollectionReference propertiesRef = db.collection("properties");
+    private void initializeViews(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        filtreButton = view.findViewById(R.id.filter);
 
-        propertiesRef.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (queryDocumentSnapshots != null) {
-                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot document : documents) {
-                            // Get the property data from Firestore document
-                            String title = document.getString("title");
-                            String description = document.getString("description");
-                            String type = document.getString("type");
-                            double price = document.getDouble("price");
-                            int rooms = document.getLong("rooms").intValue();
-                            double surface = document.getDouble("surface");
-                            double latitude = document.getDouble("latitude");
-                            double longitude = document.getDouble("longitude");
-                            String userId = document.getString("userId");
-                            boolean hasWifi = document.getBoolean("hasWifi");
-                            boolean hasParking = document.getBoolean("hasParking");
-                            boolean hasKitchen = document.getBoolean("hasKitchen");
-                            boolean hasAirConditioning = document.getBoolean("hasAirConditioning");
-                            boolean hasFurnished = document.getBoolean("hasFurnished");
-                            String documentId = document.getId();
-                            List<String> images = (List<String>) document.get("images");
+        filtreButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), Filtre.class);
+            filterActivityResultLauncher.launch(intent);
+        });
+    }
 
+    private void setupFilterLauncher() {
+        filterActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String selectedPeriod = data.getStringExtra("selectedPeriod");
+                            double minPrice = data.getDoubleExtra("minPrice", 0.0);
+                            double maxPrice = data.getDoubleExtra("maxPrice", Double.MAX_VALUE);
+                            String[] selectedFacilities = data.getStringArrayExtra("selectedFacilities");
 
-                            // Create a Property object
-                            Property property = new Property(
-                                    documentId,
-                                    title,
-                                    description,
-                                    type,
-                                    price,
-                                    rooms,
-                                    surface,
-                                    latitude,
-                                    longitude,
-                                    userId,
-                                    hasWifi,
-                                    hasParking,
-                                    hasKitchen,
-                                    hasAirConditioning,
-                                    hasFurnished,
-                                    images
-                            );
-
-                            // Add the property to the list
-                            propertyList.add(property);
+                            applyFilters(selectedPeriod, minPrice, maxPrice, selectedFacilities);
                         }
-
-                        // Now, fetch the saved properties for the current user
-                        fetchSavedPropertiesForUser();
                     }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to fetch properties: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void fetchPropertiesFromFirestore() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("properties")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    propertyList.clear();
+                    originalPropertyList.clear();
+
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Property property = createPropertyFromDocument(document);
+                        propertyList.add(property);
+                        originalPropertyList.add(property);
+                    }
+
+                    fetchSavedPropertiesForUser();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Failed to fetch properties: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private Property createPropertyFromDocument(QueryDocumentSnapshot document) {
+        return new Property(
+                document.getId(),
+                document.getString("title"),
+                document.getString("description"),
+                document.getString("type"),
+                document.getDouble("price"),
+                document.getLong("rooms").intValue(),
+                document.getDouble("surface"),
+                document.getDouble("latitude"),
+                document.getDouble("longitude"),
+                document.getString("userId"),
+                Boolean.TRUE.equals(document.getBoolean("hasWifi")),
+                Boolean.TRUE.equals(document.getBoolean("hasParking")),
+                Boolean.TRUE.equals(document.getBoolean("hasKitchen")),
+                Boolean.TRUE.equals(document.getBoolean("hasAirConditioning")),
+                Boolean.TRUE.equals(document.getBoolean("hasFurnished")),
+                (List<String>) document.get("images")
+        );
     }
 
     private void fetchSavedPropertiesForUser() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            return;
-        }
+        if (currentUser == null) return;
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .document(currentUser.getUid())
                 .collection("savedProperties")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (queryDocumentSnapshots != null) {
-                        List<DocumentSnapshot> savedDocuments = queryDocumentSnapshots.getDocuments();
-
-                        // Go through the saved properties and mark them as saved in the propertyList
-                        for (DocumentSnapshot savedDoc : savedDocuments) {
-                            String savedPropertyId = savedDoc.getId();
-
-                            for (Property property : propertyList) {
-                                if (property.getId().equals(savedPropertyId)) {
-                                    property.setSaved(true); // Mark property as saved
-                                }
-                            }
-                        }
-
-                        // After updating the saved state, set the adapter to the RecyclerView
-                        adapter = new PropertyAdapter(getContext(), propertyList);
-                        recyclerView.setAdapter(adapter);
+                    for (QueryDocumentSnapshot savedDoc : queryDocumentSnapshots) {
+                        String savedPropertyId = savedDoc.getId();
+                        propertyList.stream()
+                                .filter(p -> p.getId().equals(savedPropertyId))
+                                .findFirst()
+                                .ifPresent(p -> p.setSaved(true));
                     }
+
+                    setupAdapter();
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to fetch saved properties: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Failed to fetch saved properties: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private void setupAdapter() {
+        adapter = new PropertyAdapter(getContext(), propertyList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void applyFilters(String selectedPeriod, double minPrice, double maxPrice, String[] selectedFacilities) {
+        Log.d("FilterDebug", "Selected Period: " + selectedPeriod);
+        Log.d("FilterDebug", "Total Original Properties: " + originalPropertyList.size());
+
+        List<Property> filteredList = originalPropertyList.stream()
+                .filter(property -> {
+                    boolean periodMatch = selectedPeriod == null ||
+                            selectedPeriod.isEmpty() ||
+                            property.getType().equalsIgnoreCase(selectedPeriod);
+
+                    Log.d("FilterDebug", "Property: " + property.getTitle() +
+                            ", Type: " + property.getType() +
+                            ", Period Match: " + periodMatch);
+
+                    return periodMatch &&
+                            (property.getPrice() >= minPrice && property.getPrice() <= maxPrice) &&
+                            matchesFacilities(property, selectedFacilities);
+                })
+                .collect(Collectors.toList());
+
+        Log.d("FilterDebug", "Filtered Properties Count: " + filteredList.size());
+
+        adapter = new PropertyAdapter(getContext(), filteredList);
+        recyclerView.setAdapter(adapter);
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(getContext(), "No properties match the selected filters", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean matchesFacilities(Property property, String[] selectedFacilities) {
+        if (selectedFacilities == null || selectedFacilities.length == 0) {
+            return true;
+        }
+
+        for (String facility : selectedFacilities) {
+            boolean facilitiesMatch = false;
+
+            switch (facility) {
+                case "WiFi":
+                    facilitiesMatch = property.isHasWifi();
+                    break;
+                case "Parking":
+                    facilitiesMatch = property.isHasParking();
+                    break;
+                case "Kitchen":
+                    facilitiesMatch = property.isHasKitchen();
+                    break;
+                case "Air Conditioner":
+                    facilitiesMatch = property.isHasAirConditioning();
+                    break;
+                case "Furnished":
+                    facilitiesMatch = property.isHasFurnished();
+                    break;
+                default:
+                    facilitiesMatch = false;
+            }
+
+            if (!facilitiesMatch) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
+    private boolean matchesPeriod(Property property, String selectedPeriod) {
+        if (selectedPeriod == null || selectedPeriod.isEmpty()) {
+            return true;
+        }
 
+        // Trim and convert to uppercase to ensure exact matching
+        String propertyType = property.getType().trim().toUpperCase();
+        String selectedType = selectedPeriod.trim().toUpperCase();
+
+        Log.d("PeriodDebug", "Property Type: " + propertyType +
+                ", Selected Type: " + selectedType +
+                ", Matches: " + propertyType.equals(selectedType));
+
+        return propertyType.equals(selectedType);
+    }
 }

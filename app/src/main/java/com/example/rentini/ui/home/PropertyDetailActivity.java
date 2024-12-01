@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.rentini.ChatActivity;
+
 import com.example.rentini.R;
 import com.example.rentini.models.Property;
 import com.google.android.material.button.MaterialButton;
@@ -114,10 +114,7 @@ public class PropertyDetailActivity extends AppCompatActivity {
         
         contact0.setOnClickListener(v -> {
 
-            String ownerId = getIntent().getStringExtra("ownerId");
-            Intent chatIntent = new Intent(this, ChatActivity.class);
-            chatIntent.putExtra("otherUserId", ownerId);
-            startActivity(chatIntent);
+
 
         });
     }
