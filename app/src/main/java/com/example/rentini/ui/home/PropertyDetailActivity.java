@@ -100,70 +100,121 @@ public class PropertyDetailActivity extends AppCompatActivity {
     }
 
     private void loadPropertyDetails() {
-        String title = getIntent().getStringExtra("title");
-        String description = getIntent().getStringExtra("description");
-        int rooms = getIntent().getIntExtra("rooms", 0);
-        double surface = getIntent().getDoubleExtra("surface", 0.0);
-        double price = getIntent().getDoubleExtra("price", 0.0);
-        String type = getIntent().getStringExtra("type");
-        String ownerId = getIntent().getStringExtra("ownerId");
+        // Get only the property ID from intent
+        String propertyId = getIntent().getStringExtra("propertyId");
+        
+        if (propertyId == null) {
+            finish();
+            return;
+        }
 
-        boolean hasWifi = getIntent().getBooleanExtra("hasWifi", false);
-        boolean hasParking = getIntent().getBooleanExtra("hasParking", false);
-        boolean hasKitchen = getIntent().getBooleanExtra("hasKitchen", false);
-        boolean hasAirConditioner = getIntent().getBooleanExtra("hasAirConditioner", false);
-        boolean isFurnished = getIntent().getBooleanExtra("isFurnished", false);
-
-        List<String> images = getIntent().getStringArrayListExtra("images");
-
-        titleTextView.setText(title);
-        descriptionTextView.setText(description);
-        roomsTextView.setText(String.format("%d Rooms", rooms));
-        surfaceTextView.setText(String.format("%.1f m²", surface));
-        priceTextView.setText(String.format("$%.2f", price));
-        typeTextView.setText("/" + type);
-
-        wifi.setVisibility(hasWifi ? View.VISIBLE : View.GONE);
-        parking.setVisibility(hasParking ? View.VISIBLE : View.GONE);
-        kitchen.setVisibility(hasKitchen ? View.VISIBLE : View.GONE);
-        ac.setVisibility(hasAirConditioner ? View.VISIBLE : View.GONE);
-        furnished.setVisibility(isFurnished ? View.VISIBLE : View.GONE);
-
+        // Get property details from Firestore
         FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(ownerId)
+            .collection("properties")
+            .document(propertyId)
             .get()
             .addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    String ownerName = documentSnapshot.getString("firstName") + " " + 
-                                     documentSnapshot.getString("lastName");
-                    ownerNameTextView.setText(ownerName);
+                if (!documentSnapshot.exists()) {
+                    finish();
+                    return;
                 }
+
+                // Get property data
+                String title = documentSnapshot.getString("title");
+                String description = documentSnapshot.getString("description");
+                long rooms = documentSnapshot.getLong("rooms");
+                double surface = documentSnapshot.getDouble("surface");
+                double price = documentSnapshot.getDouble("price");
+                String type = documentSnapshot.getString("type");
+                String ownerId = documentSnapshot.getString("userId");
+                boolean hasWifi = documentSnapshot.getBoolean("hasWifi");
+                boolean hasParking = documentSnapshot.getBoolean("hasParking");
+                boolean hasKitchen = documentSnapshot.getBoolean("hasKitchen");
+                boolean hasAirConditioner = documentSnapshot.getBoolean("hasAirConditioning");
+                boolean isFurnished = documentSnapshot.getBoolean("hasFurnished");
+                double latitude = documentSnapshot.getDouble("latitude");
+                double longitude = documentSnapshot.getDouble("longitude");
+                List<String> images = (List<String>) documentSnapshot.get("images");
+
+                // Update UI
+                titleTextView.setText(title);
+                descriptionTextView.setText(description);
+                roomsTextView.setText(String.format("%d Rooms", rooms));
+                surfaceTextView.setText(String.format("%.1f m²", surface));
+                priceTextView.setText(String.format("$%.2f", price));
+                typeTextView.setText("/" + type);
+
+                wifi.setVisibility(hasWifi ? View.VISIBLE : View.GONE);
+                parking.setVisibility(hasParking ? View.VISIBLE : View.GONE);
+                kitchen.setVisibility(hasKitchen ? View.VISIBLE : View.GONE);
+                ac.setVisibility(hasAirConditioner ? View.VISIBLE : View.GONE);
+                furnished.setVisibility(isFurnished ? View.VISIBLE : View.GONE);
+
+                // Load owner details
+                FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(ownerId)
+                    .get()
+                    .addOnSuccessListener(userSnapshot -> {
+                        if (userSnapshot.exists()) {
+                            String ownerName = userSnapshot.getString("firstName") + " " + 
+                                             userSnapshot.getString("lastName");
+                            ownerNameTextView.setText(ownerName);
+                        }
+                    });
+
+                // Setup map
+                Configuration.getInstance().setUserAgentValue(getPackageName());
+                mapView.setTileSource(TileSourceFactory.MAPNIK);
+                mapView.setMultiTouchControls(true);
+
+                // Create marker at property location 
+                GeoPoint propertyLocation = new GeoPoint(latitude, longitude);
+                Marker marker = new Marker(mapView);
+                marker.setPosition(propertyLocation);
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                mapView.getOverlays().add(marker);
+
+                // Center map on property location
+                IMapController mapController = mapView.getController();
+                mapController.setZoom(15.0);
+                mapController.setCenter(propertyLocation);
+
+                // Refresh map
+                mapView.invalidate();
+
+                // Setup image gallery if images exist
+                if (images != null && !images.isEmpty()) {
+                    setupImageGallery(images);
+                }
+            })
+            .addOnFailureListener(e -> {
+                // Handle error
+                finish();
             });
+    }
 
-        // Initialize map
-        Configuration.getInstance().setUserAgentValue(getPackageName());
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setMultiTouchControls(true);
+    // Modified setupImageGallery to accept images parameter
+    private void setupImageGallery(List<String> images) {
+        imageGalleryRecyclerView = findViewById(R.id.imageGalleryRecyclerView);
         
-        // Get coordinates from intent
-        double latitude = getIntent().getDoubleExtra("latitude", 0);
-        double longitude = getIntent().getDoubleExtra("longitude", 0);
+        ImageGalleryAdapter adapter = new ImageGalleryAdapter(
+            this, 
+            images, 
+            bitmap -> {
+                // Optional: Show full-size image when gallery image is clicked
+                // fullSizeImageView.setImageBitmap(bitmap);
+            }
+        );
 
-        // Create marker at property location
-        GeoPoint propertyLocation = new GeoPoint(latitude, longitude);
-        Marker marker = new Marker(mapView);
-        marker.setPosition(propertyLocation);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        mapView.getOverlays().add(marker);
-
-        // Center map on property location
-        IMapController mapController = mapView.getController();
-        mapController.setZoom(15.0);
-        mapController.setCenter(propertyLocation);
-
-        // Refresh map
-        mapView.invalidate();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(
+            this, 
+            LinearLayoutManager.HORIZONTAL, 
+            false
+        );
+        
+        imageGalleryRecyclerView.setLayoutManager(layoutManager);
+        imageGalleryRecyclerView.setAdapter(adapter);
     }
 
     @Override

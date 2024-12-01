@@ -105,21 +105,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         holder.itemView.setOnClickListener(v -> {
             Log.d("PropertyAdapter", "Clicked on property: " + property.getTitle());
             Intent intent = new Intent(context, PropertyDetailActivity.class);
-            intent.putExtra("rooms", property.getRooms());
-            intent.putExtra("surface", property.getSurface());
-            intent.putExtra("price", property.getPrice());
-            intent.putExtra("title", property.getTitle());
-            intent.putExtra("description", property.getDescription());
-            intent.putExtra("type", property.getType());
-            intent.putExtra("ownerId", property.getUserId());
-            intent.putExtra("hasWifi", property.isHasWifi());
-            intent.putExtra("hasParking", property.isHasParking());
-            intent.putExtra("hasKitchen", property.isHasKitchen());
-            intent.putExtra("hasAirConditioner", property.isHasAirConditioning());
-            intent.putExtra("isFurnished", property.isHasFurnished());
-            intent.putExtra("longitude", property.getLongitude());
-            intent.putExtra("latitude", property.getLatitude());
-            intent.putStringArrayListExtra("images", new ArrayList<>(property.getImages()));
+            intent.putExtra("propertyId", property.getId());
             context.startActivity(intent);
         });
 
