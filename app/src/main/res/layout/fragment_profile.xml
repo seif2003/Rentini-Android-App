@@ -14,16 +14,15 @@
         android:padding="24dp">
 
         <!-- Profile Image -->
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:padding="4dp"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/CircleImageView"
             android:src="@drawable/profile1"
-            app:strokeWidth="2dp"
-            app:strokeColor="?attr/colorPrimary"/>
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:tint="#615E63" />
 
         <!-- Name -->
         <com.google.android.material.textview.MaterialTextView

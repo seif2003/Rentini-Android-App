@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView 
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,33 +23,33 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/back"/>
+                android:src="@drawable/back" />
 
         </RelativeLayout>
 
-        <!-- Property Image with Indicator -->
-        <RelativeLayout
+        <!-- image horizental gallery list view-->
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/propertyImage"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"
-                android:text="1/11"
-                android:textColor="@android:color/white"
-                android:background="#80000000"
-                android:padding="4dp"/>
-        </RelativeLayout>
+                android:orientation="vertical">
+
+                <!-- Add this section for horizontal image gallery -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/imageGalleryRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <!-- Rest of your existing layout remains the same -->
+                <!-- ... -->
+            </LinearLayout>
+        </ScrollView>
 
         <!-- Property Title and Location -->
         <TextView
@@ -69,6 +69,12 @@
             android:layout_marginTop="8dp"
             android:drawableStart="@drawable/location"
             android:text="Location" />
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp" />
 
         <!-- Price -->
 
@@ -91,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/hind_bold"/>
+                android:fontFamily="@font/hind_bold" />
         </LinearLayout>
 
         <!-- Owner Info -->
@@ -105,7 +111,7 @@
                 android:id="@+id/ownerImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/profile"/>
+                android:src="@drawable/profile" />
 
             <TextView
                 android:id="@+id/ownerNameTextView"
@@ -117,17 +123,6 @@
                 android:text="Seif Ddine Ben Amara"
                 android:textStyle="bold" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/contact0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gradient_button_background"
-                app:backgroundTint="@null"
-                app:icon="@drawable/message"
-                app:iconSize="24dp"
-                app:iconGravity="textStart"
-                app:cornerRadius="118dp" />
-
         </LinearLayout>
 
         <!-- Facilities -->
@@ -137,7 +132,7 @@
             android:layout_marginTop="16dp"
             android:text="Home facilities"
             android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -247,29 +242,19 @@
                     android:textColor="#666666" />
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/contact1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gradient_button_background"
-                android:text="Contact"
-                android:textColor="@android:color/white"
-                android:textSize="20dp"
-                app:backgroundTint="@null"
-                app:cornerRadius="118dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/contact2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:background="@drawable/gradient_button_background2"
+                android:background="@drawable/gradient_button_background"
                 app:backgroundTint="@null"
                 app:cornerRadius="118dp"
                 app:icon="@drawable/phone"
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
-                app:iconTint="#a1a1a1" />
+                app:iconTint="#FFF" />
 
         </LinearLayout>
 

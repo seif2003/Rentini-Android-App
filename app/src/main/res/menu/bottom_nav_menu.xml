@@ -11,12 +11,6 @@
         />
 
     <item
-        android:id="@+id/navigation_chat"
-        android:icon="@drawable/message"
-        android:title="@string/chat_title"
-        />
-
-    <item
         android:id="@+id/navigation_properties"
         android:icon="@drawable/lease"
         android:title="@string/title_properties"/>
