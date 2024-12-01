@@ -14,12 +14,6 @@
         />
 
     <fragment
-        android:id="@+id/navigation_chat"
-        android:name="com.example.rentini.ui.chat.ChatFragment"
-        android:label="@string/chat_title"
-        tools:layout="@layout/fragment_chat" />
-
-    <fragment
         android:id="@+id/navigation_properties"
         android:name="com.example.rentini.ui.properties.PropertiesFragment"
         android:label="Profile"

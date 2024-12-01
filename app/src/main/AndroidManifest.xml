@@ -27,9 +27,6 @@
             android:name=".ui.properties.EditPropertyActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.home.PropertyDetailActivity"
             android:exported="false" />
         <activity

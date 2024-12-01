@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.activity)
     implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("com.google.android.material:material:1.11.0")
 
     // Firebase dependencies
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))

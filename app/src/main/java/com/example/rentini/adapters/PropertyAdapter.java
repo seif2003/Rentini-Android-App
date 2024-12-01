@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +30,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.PropertyViewHolder> {
 
@@ -111,6 +117,9 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             intent.putExtra("hasKitchen", property.isHasKitchen());
             intent.putExtra("hasAirConditioner", property.isHasAirConditioning());
             intent.putExtra("isFurnished", property.isHasFurnished());
+            intent.putExtra("longitude", property.getLongitude());
+            intent.putExtra("latitude", property.getLatitude());
+            intent.putStringArrayListExtra("images", new ArrayList<>(property.getImages()));
             context.startActivity(intent);
         });
 
@@ -133,6 +142,8 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             property.setSaved(!property.isSaved());
             updateSaveButtonState(holder.saveButton, property);
         });
+
+        setAddressForProperty(holder, property.getLatitude(), property.getLongitude());
 
 
     }
@@ -199,6 +210,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         TextView surfaceTextView;
         TextView featuresTextView;
         ImageButton saveButton, filtreButton;
+        TextView localisation;
 
         public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -211,7 +223,37 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             //featuresTextView = itemView.findViewById(R.id.property_features);
             saveButton = itemView.findViewById(R.id.save_property);
             filtreButton= itemView.findViewById(R.id.filter);
+            localisation = itemView.findViewById(R.id.localisation);
         }
+    }
+
+    private void setAddressForProperty(PropertyViewHolder holder, double latitude, double longitude) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                try {
+                    Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                    
+                    if (addresses != null && !addresses.isEmpty()) {
+                        Address address = addresses.get(0);
+                        return address.getAddressLine(0);
+                    }
+                } catch (IOException e) {
+                    Log.e("PropertyAdapter", "Error getting address", e);
+                }
+                return null;
+            }
+    
+            @Override
+            protected void onPostExecute(String addressLine) {
+                if (addressLine != null) {
+                    holder.localisation.setText(addressLine);
+                } else {
+                    holder.localisation.setText("Location not found");
+                }
+            }
+        }.execute();
     }
 
 }

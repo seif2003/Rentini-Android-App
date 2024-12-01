@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.rentini.PersonalDetails;
 import com.example.rentini.R;
 import com.example.rentini.SignIn;
 import com.example.rentini.databinding.FragmentProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
     private ProfileViewModel mViewModel;
@@ -41,17 +44,41 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        // Get TextViews
+        TextView profileName = view.findViewById(R.id.profile_name);
+        TextView profileEmail = view.findViewById(R.id.profile_email);
+
+        // Get current user from Firebase
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // Get email from Firebase Auth
+            profileEmail.setText(currentUser.getEmail());
+
+            // Get name from Firestore
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(currentUser.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String firstName = documentSnapshot.getString("firstName");
+                        String lastName = documentSnapshot.getString("lastName");
+                        String fullName = firstName + " " + lastName;
+                        profileName.setText(fullName);
+                    }
+                });
+        }
+
+        // Your existing code
         Button logoutButton = view.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();
-            // Navigate to SignIn activity
             startActivity(new Intent(getActivity(), SignIn.class));
             getActivity().finish();
         });
 
-        // Set click listener for personal details button
         binding.personalDetailsButton.setOnClickListener(v -> {
-            // Start PersonalDetails activity
             Intent intent = new Intent(getActivity(), PersonalDetails.class);
             startActivity(intent);
         });
