@@ -1,9 +1,12 @@
 package com.example.rentini.ui.home;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,7 +103,6 @@ public class PropertyDetailActivity extends AppCompatActivity {
     }
 
     private void loadPropertyDetails() {
-        // Get only the property ID from intent
         String propertyId = getIntent().getStringExtra("propertyId");
         
         if (propertyId == null) {
@@ -108,7 +110,6 @@ public class PropertyDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Get property details from Firestore
         FirebaseFirestore.getInstance()
             .collection("properties")
             .document(propertyId)
@@ -119,14 +120,16 @@ public class PropertyDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Get property data
+                // Get property owner's ID
+                String ownerId = documentSnapshot.getString("userId");
+                
+                // Get other property details as before
                 String title = documentSnapshot.getString("title");
                 String description = documentSnapshot.getString("description");
                 long rooms = documentSnapshot.getLong("rooms");
                 double surface = documentSnapshot.getDouble("surface");
                 double price = documentSnapshot.getDouble("price");
                 String type = documentSnapshot.getString("type");
-                String ownerId = documentSnapshot.getString("userId");
                 boolean hasWifi = documentSnapshot.getBoolean("hasWifi");
                 boolean hasParking = documentSnapshot.getBoolean("hasParking");
                 boolean hasKitchen = documentSnapshot.getBoolean("hasKitchen");
@@ -136,7 +139,7 @@ public class PropertyDetailActivity extends AppCompatActivity {
                 double longitude = documentSnapshot.getDouble("longitude");
                 List<String> images = (List<String>) documentSnapshot.get("images");
 
-                // Update UI
+                // Update UI with property details
                 titleTextView.setText(title);
                 descriptionTextView.setText(description);
                 roomsTextView.setText(String.format("%d Rooms", rooms));
@@ -187,9 +190,32 @@ public class PropertyDetailActivity extends AppCompatActivity {
                 if (images != null && !images.isEmpty()) {
                     setupImageGallery(images);
                 }
+
+                // Now fetch the owner's phone number from users collection
+                if (ownerId != null) {
+                    FirebaseFirestore.getInstance()
+                        .collection("users")
+                        .document(ownerId)
+                        .get()
+                        .addOnSuccessListener(userDoc -> {
+                            if (userDoc.exists()) {
+                                String ownerPhone = userDoc.getString("phone");
+                                // Update the UI with the phone number
+                                contact2.setOnClickListener(v -> {
+                                    // Create intent to dial the phone number
+                                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                                    dialIntent.setData(Uri.parse("tel:" + ownerPhone));
+                                    startActivity(dialIntent);
+                                });
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Error fetching owner details", Toast.LENGTH_SHORT).show();
+                        });
+                }
             })
             .addOnFailureListener(e -> {
-                // Handle error
+                Toast.makeText(this, "Error loading property details", Toast.LENGTH_SHORT).show();
                 finish();
             });
     }
